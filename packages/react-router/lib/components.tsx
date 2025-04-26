@@ -80,21 +80,21 @@ export function mapRouteProperties(route: RouteObject) {
       route.errorElement != null,
   };
 
-  if (route.Component) {
-    if (ENABLE_DEV_WARNINGS) {
-      if (route.element) {
-        warning(
-          false,
-          "You should not include both `Component` and `element` on your route - " +
-            "`Component` will be used."
-        );
-      }
-    }
-    Object.assign(updates, {
-      element: React.createElement(route.Component),
-      Component: undefined,
-    });
-  }
+  // if (route.Component) {
+  //   if (ENABLE_DEV_WARNINGS) {
+  //     if (route.element) {
+  //       warning(
+  //         false,
+  //         "You should not include both `Component` and `element` on your route - " +
+  //           "`Component` will be used."
+  //       );
+  //     }
+  //   }
+  //   Object.assign(updates, {
+  //     element: React.createElement(route.Component),
+  //     Component: undefined,
+  //   });
+  // }
 
   if (route.HydrateFallback) {
     if (ENABLE_DEV_WARNINGS) {

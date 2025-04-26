@@ -28,6 +28,7 @@ import type {
   RelativeRoutingType,
   Router as DataRouter,
   RevalidationState,
+  HydrationState,
 } from "./router/router";
 import { IDLE_BLOCKER } from "./router/router";
 import type {
@@ -891,6 +892,18 @@ export function _renderMatches(
     let matches = parentMatches.concat(renderedMatches.slice(0, index + 1));
     let getChildren = () => {
       let children: React.ReactNode;
+      const loaderData = match.route.id
+        ? dataRouterState?.loaderData[match.route.id]
+        : undefined;
+      const actionData =
+        match.route.id && dataRouterState?.actionData
+          ? dataRouterState?.actionData[match.route.id]
+          : undefined;
+      const errors =
+        match.route.id && dataRouterState?.errors
+          ? dataRouterState?.errors[match.route.id]
+          : undefined;
+
       if (error) {
         children = errorElement;
       } else if (shouldRenderHydrateFallback) {
@@ -902,7 +915,11 @@ export function _renderMatches(
         // `<Route Component={...}>` in `<Routes>` but generally `Component`
         // usage is only advised in `RouterProvider` when we can convert it to
         // `element` ahead of time.
-        children = <match.route.Component />;
+        children = React.createElement<HydrationState>(match.route.Component, {
+          loaderData,
+          actionData,
+          errors,
+        });
       } else if (match.route.element) {
         children = match.route.element;
       } else {
